@@ -1,0 +1,13 @@
+li {
+    color: white;
+}
+
+body {
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    text-decoration: none;
+    justify-content: space-around;
+}
