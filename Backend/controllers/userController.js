@@ -2,7 +2,6 @@ const { createUserSevice, deleteUserSevice, getAllUserSevice, updateUserSevice, 
 
 const createUser = async (req, res) => {
     const { name, email } = req.body;
-    console.log(name, email);
 
     try {
         const newUser = await createUserSevice(name, email)
@@ -36,7 +35,6 @@ const getByIdUser = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     const { name, email } = req.body;
-    console.log(req.params.id);
 
     try {
         const rowCount = await updateUserSevice(req.params.id, name, email)

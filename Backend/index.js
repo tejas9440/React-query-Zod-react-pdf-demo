@@ -4,11 +4,23 @@ const dotenv = require('dotenv')
 const pool = require('./config/db.js')
 const userRouter = require('./Routes/userRoutes.js')
 const createUserTable = require('./data/createUserTable.js')
+const morgan = require('morgan')
+
+
+//! Logger 
+// const logger = require('./utilites/winston.js')
+// logger.info('Give some information')
+
+
+morgan.token("host", (req, res) => {
+    return req.hostname
+})
 
 dotenv.config()
 
 const PORT = process.env.port || 5001
 
+app.use(morgan(`:method :url`))
 app.use(express.json())
 
 //!create table before starting server
@@ -33,6 +45,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
         res.send('Successfully Uploade!!')
     }
     catch (err) {
+        logger.error(err)
         res.send(err)
     }
 })
@@ -44,6 +57,7 @@ app.post('/user', (req, res) => {
     const { error, value } = validatorUser(req.body)
     if (error) {
         console.log(error.details);
+        logger.error(error.details);
         return res.send(error.details)
     }
     res.send('Successfully!!')
@@ -55,6 +69,9 @@ app.get("/", async (req, res) => {
     const result = await pool.query("SELECT current_database()");
     res.send(`database name is:${result.rows[0].current_database}`)
 })
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Listening On Port ${PORT}`);
