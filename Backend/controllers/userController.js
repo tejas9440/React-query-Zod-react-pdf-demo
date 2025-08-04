@@ -1,17 +1,36 @@
-const { createUserSevice, deleteUserSevice, getAllUserSevice, updateUserSevice, getByIDUserSevice } = require('../models/userModel')
+const { createUserSevice, deleteUserSevice, getAllUserSevice, updateUserSevice, getByIDUserSevice, loginUserSerrvice } = require('../models/userModel')
+const bcrypt = require('bcrypt')
+
 
 const createUser = async (req, res) => {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
+    const hashPass = await bcrypt.hash(password, 10);
+    console.log(hashPass);
 
     try {
-        const newUser = await createUserSevice(name, email)
+        const newUser = await createUserSevice(name, email, hashPass)
         res.send(newUser)
     }
     catch (err) {
+        console.log(err);
+
         res.send(err)
     }
 }
 
+
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const result = await loginUserSerrvice(email, password)
+        res.send(result)
+    }
+    catch (err) {
+        console.log(err);
+
+        res.send(err)
+    }
+}
 
 const getAllUser = async (req, res) => {
     try {
@@ -62,4 +81,4 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { createUser, getAllUser, getByIdUser, updateUser, deleteUser }
+module.exports = { createUser, getAllUser, getByIdUser, updateUser, deleteUser, loginUser }

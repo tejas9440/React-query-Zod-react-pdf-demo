@@ -16,8 +16,6 @@ function App() {
     }
 
     socket.on('message', handleMessage)
-
-    // Cleanup on unmount
     return () => {
       socket.off('message', handleMessage)
     }
