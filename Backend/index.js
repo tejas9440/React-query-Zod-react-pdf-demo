@@ -6,6 +6,8 @@ const userRouter = require('./Routes/userRoutes.js')
 const createUserTable = require('./data/createUserTable.js')
 const morgan = require('morgan')
 
+dotenv.config()
+const PORT = process.env.port || 5001
 
 //! Logger 
 // const logger = require('./utilites/winston.js')
@@ -16,9 +18,6 @@ morgan.token("host", (req, res) => {
     return req.hostname
 })
 
-dotenv.config()
-
-const PORT = process.env.port || 5001
 
 app.use(morgan(`:method :url`))
 app.use(express.json())
@@ -57,10 +56,10 @@ app.post('/user', (req, res) => {
     const { error, value } = validatorUser(req.body)
     if (error) {
         console.log(error.details);
-        logger.error(error.details);
-        return res.send(error.details)
+        return res.send(error.details[0].message)
     }
-    res.send('Successfully!!')
+    console.log(value);
+    res.send(value)
 })
 
 
